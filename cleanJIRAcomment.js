@@ -1,7 +1,7 @@
 var t = document.getElementById("comment").value;
 t = t.replace(/=\n/gi,"");
 t = t.replace(/=20/g,"");
-var n = new Array("=C2=B7","=E2=80=99","=C2=A9","=E2=80=98","=E2=80=93");
+var n = new Array("=C2=B7","=E2=80=99","=C2=A9","=E2=80=98","=E2=80=93","=E2=80=9C","=E2=80=9D");
 for (var i=0; i<n.length; i++)
 {
 	t = r(t,n[i]);
