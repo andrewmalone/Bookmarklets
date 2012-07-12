@@ -58,4 +58,5 @@ function runthis() {
 		}
 	});
 	$("#env").val('https://' + window.location.host);
+	$("#segmentId").focus();
 }
