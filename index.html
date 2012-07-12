@@ -23,12 +23,13 @@ h2,p {
 <h2>GMAS Bookmarklet Tools</h2>
 <p>To install, drag any of the links to your bookmarks bar.</p>
 <ul>
-	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='http://andrewmalone.github.com/Bookmarklets/showPageIds.js';document.body.appendChild(newScript);})()">Show Page Ids</a></li>
-	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='http://andrewmalone.github.com/Bookmarklets/gotoFund.js';document.body.appendChild(newScript);})()">Go to Fund</a></li>
-	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='http://andrewmalone.github.com/Bookmarklets/gotoSegmentId.js';document.body.appendChild(newScript);})()">Go to Segment Id</a></li>
-	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='http://andrewmalone.github.com/Bookmarklets/gotoProjectId.js';document.body.appendChild(newScript);})()">Go to Project Id</a></li>
+	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='https://raw.github.com/andrewmalone/Bookmarklets/showPageIds.js';document.body.appendChild(newScript);})()">Show Page Ids</a></li>
+	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='https://raw.github.com/andrewmalone/Bookmarklets/gotoFund.js';document.body.appendChild(newScript);})()">Go to Fund</a></li>
+	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='https://raw.github.com/andrewmalone/Bookmarklets/gotoSegmentId.js';document.body.appendChild(newScript);})()">Go to Segment Id</a></li>
+	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='https://raw.github.com/andrewmalone/Bookmarklets/gotoProjectId.js';document.body.appendChild(newScript);})()">Go to Project Id</a></li>
 	<li><a href="javascript:(function(){$('.closed').removeClass('closed').addClass('open');})()">Open all on segment documents</a></li>
-	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='http://andrewmalone.github.com/Bookmarklets/generateTestLink.js';document.body.appendChild(newScript);})()">Generate test link for request</a></li>
+	<li><a href="javascript:(function(){var newScript=document.createElement('script');newScript.src='https://raw.github.com/andrewmalone/generateTestLink.js';document.body.appendChild(newScript);})()">Generate test link for request</a></li>
+	<li><a href="javascript:(function(){for(var a=document.getElementsByTagName("input"),b=0;b<a.length;b++){var c=a[b];"radio"==c.getAttribute("type")&&"false"==c.getAttribute("value")&&c.setAttribute("checked","true")};})();">Set all radio buttons to false</a></li>
 </ul>
 </body>
 </html>
