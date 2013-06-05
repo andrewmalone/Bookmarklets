@@ -13,15 +13,25 @@ var h = document.getElementsByTagName("head")[0];
 var c = document.createElement("style")
 c.innerHTML = "\
 .tseBox {\
-	border:1px solid #999;\
-	position:fixed;\
-	top:10%;\
-	left:10%;\
-	background:#E9E9E9;\
-	box-shadow:3px 3px 6px 0px #ccc;\
-	padding:.5em;\
-	border-radius:.5em;\
-	font-family:Arial;\
+    border:1px solid #999;\
+    position:fixed;\
+    top:10%;\
+    left:10%;\
+    background:#E9E9E9;\
+    box-shadow:3px 3px 6px 0px #ccc;\
+    padding:.5em;\
+    border-radius:.5em;\
+    font-family:Arial;\
+}\
+.tseBox h3 {\
+	margin:0 0 .5em 0;\
+	border-bottom:1px solid #ccc;\
+	padding:0 0 .25em 1.5em;\
+}\
+.tseBox-close {\
+	position:absolute;\
+	top:.5em;\
+	left:.5em;\
 }\
 ";
 
@@ -46,6 +56,8 @@ close.addEventListener("click", function(e) {
 	var box = this.parentNode;
 	box.parentNode.removeChild(box);
 }, false);
+var header = create("h3",{},"Go to Segment ID");
+d.appendChild(header);
 d.appendChild(close)
 
 var content = create("div")
