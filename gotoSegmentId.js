@@ -1,62 +1,82 @@
-if ( !($ = window.jQuery) || '1.6.1' > $.fn.jquery  ) {
-	loadScript('https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js',getui);
-} else {
-	getui();
+
+function $$(selector, start) {
+    if (start != null) return start.querySelectorAll(selector);
+    return document.querySelectorAll(selector);
 }
 
-function loadScript(script,onLoad) {
-	var s = document.createElement('script');
-	s.type = 'text/javascript';
-	s.onload = onLoad;
-	s.src = script;
-	document.body.appendChild(s);
+function $(selector, start) {
+	if (start != null) return start.querySelector(selector);
+	return document.querySelector(selector);
 }
 
-function getui() {
-	if ($.ui) {
-		getCss();
-	}
-	else {
-		loadScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',getCss);
-	}
-}
+var h = document.getElementsByTagName("head")[0];
+var c = document.createElement("style")
+c.innerHTML = "\
+.tseBox {\
+	border:1px solid #999;\
+	position:fixed;\
+	top:10%;\
+	left:10%;\
+	background:#E9E9E9;\
+	box-shadow:3px 3px 6px 0px #ccc;\
+	padding:.5em;\
+	border-radius:.5em;\
+	font-family:Arial;\
+}\
+";
 
-function getCss() {
-	var headID = document.getElementsByTagName("head")[0];         
-	var cssNode = document.createElement('link');
-	cssNode.type = 'text/css';
-	cssNode.rel = 'stylesheet';
-	cssNode.href = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/base/jquery-ui.css';
-	cssNode.media = 'screen';
-//	cssNode.onload = runthis;
-	headID.appendChild(cssNode);
-	runthis()
-}
+h.appendChild(c)
 
-function runthis() {
-	var n = "\
-	<div>\
-	<form>\
-	<select id='env' name='env'>\
-		<option value='https://gmasdev.cadm.harvard.edu'>DEV</option>\
-		<option value='https://gmastest.cadm.harvard.edu'>TEST</option>\
-		<option value='https://gmastraining.harvard.edu'>TRAINING</option>\
-		<option value='https://gmas.harvard.edu'>PROD</option>\
-	</select>\
-	<input type='text' name='segmentId' id='segmentId' />\
-	</form>\
-	</div>\
-	";
-	$(n).dialog({
-		buttons: {
-			"OK": function() {
-				// NEEDS INPUT VALIDATION!!
-				var urlstring = "/gmas/project/SCR0104SegmentHome.jsp?segmentId=";
-				$(this).dialog("close");
-				window.location = $("#env").val() + urlstring + $.trim($("#segmentId").val());			
-			}
+function create(elem, attr, text) {
+	var e = document.createElement(elem);
+	for (var i in attr) {
+		if (attr.hasOwnProperty(i)) {
+			e.setAttribute(i, attr[i]);
 		}
-	});
-	$("#env").val('https://' + window.location.host);
-	$("#segmentId").focus();
+	}
+	if (text != null) {
+		e.appendChild(document.createTextNode(text));
+	}
+	return e;
+}
+
+var d = create("div", {class:"tseBox"});
+var close = create("button", {class:"tseBox-close"}, "X")
+close.addEventListener("click", function(e) {
+	var box = this.parentNode;
+	box.parentNode.removeChild(box);
+}, false);
+d.appendChild(close)
+
+var content = create("div")
+
+var str = "\
+<div>\
+<form>\
+<select id='env' name='env'>\
+	<option value='https://gmasdev.cadm.harvard.edu'>DEV</option>\
+	<option value='https://gmastest.cadm.harvard.edu'>TEST</option>\
+	<option value='https://gmastraining.harvard.edu'>TRAINING</option>\
+	<option value='https://gmas.harvard.edu'>PROD</option>\
+</select>\
+<input type='text' name='segmentId' id='segmentId' />\
+</form>\
+</div>\
+";
+
+content.innerHTML = str;
+
+d.appendChild(content)
+document.body.appendChild(d);
+$("#segmentId").focus();
+$("#env").value = 'https://' + window.location.host;
+$("#segmentId").addEventListener("keyup", up, false);
+
+function up(e) {
+	if (e.ctrlKey && e.keyCode == 86) {
+		var urlstring = "/gmas/project/SCR0104SegmentHome.jsp?segmentId=";
+		//$(this).dialog("close");
+		window.location = $("#env").value + urlstring + this.value.trim();
+		$(".tseBox-close").click();
+	}
 }
