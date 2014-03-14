@@ -88,6 +88,7 @@ $("#segmentId").addEventListener("keyup", up, false);
 function up(e) {
 	console.log(e, e.keyIdentifier, e.keyCode)
 	if ((e.keyIdentifier == "Meta" || e.ctrlKey) && e.keyCode == 86) {
+		console.log("Match!")
 		var urlstring = "/gmas/project/SCR0104SegmentHome.jsp?segmentId=";
 		//$(this).dialog("close");
 		window.location = $("#env").value + urlstring + this.value.trim();
