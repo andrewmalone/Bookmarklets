@@ -1,83 +1,105 @@
-if ( !($ = window.jQuery) || '1.6.1' > $.fn.jquery  ) {
-	loadScript('https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js',getui);
-} else {
-	getui();
+
+function $$(selector, start) {
+    if (start != null) return start.querySelectorAll(selector);
+    return document.querySelectorAll(selector);
 }
 
-function loadScript(script,onLoad) {
-	var s = document.createElement('script');
-	s.type = 'text/javascript';
-	s.onload = onLoad;
-	s.src = script;
-	document.body.appendChild(s);
+function $(selector, start) {
+    if (start != null) return start.querySelector(selector);
+    return document.querySelector(selector);
 }
 
-function getui() {
-	if ($.ui) {
-		getCss();
-	}
-	else {
-		loadScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',getCss);
-	}
+function selectText(element) {
+    // from http://stackoverflow.com/questions/11128130/select-text-in-javascript
+    var doc = document;
+    var text = element; //doc.getElementById(element);    
+
+    if (doc.body.createTextRange) { // ms
+        var range = doc.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else if (window.getSelection) { // moz, opera, webkit
+        var selection = window.getSelection();            
+        var range = doc.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
 }
 
-function getCss() {
-	var headID = document.getElementsByTagName("head")[0];         
-	var cssNode = document.createElement('link');
-	cssNode.type = 'text/css';
-	cssNode.rel = 'stylesheet';
-	cssNode.href = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/base/jquery-ui.css';
-	cssNode.media = 'screen';
-//	cssNode.onload = runthis;
-	headID.appendChild(cssNode);
-	runthis()
+// create some css...
+var h = document.getElementsByTagName("head")[0];
+var c = document.createElement("style")
+c.innerHTML = "\
+.tseBox {\
+    border:1px solid #999;\
+    position:fixed;\
+    top:10%;\
+    left:10%;\
+    background:#E9E9E9;\
+    box-shadow:3px 3px 6px 0px #ccc;\
+    padding:.5em;\
+    border-radius:.5em;\
+    font-family:Arial;\
+}\
+";
+
+h.appendChild(c)
+
+function create(elem, attr, text) {
+    var e = document.createElement(elem);
+    for (var i in attr) {
+        if (attr.hasOwnProperty(i)) {
+            e.setAttribute(i, attr[i]);
+        }
+    }
+    if (text != null) {
+        e.appendChild(document.createTextNode(text));
+    }
+    return e;
 }
 
-function runthis() {
-	// for radio buttons
-	// $("input[type='radio'][value='false']").attr('checked',true);
-	
-	// get the project Id
-	var x = $.trim($("td.strong:contains('Project ID')+td+td").html());
-	while (x.charAt(0) === '0') x = x.substr(1);
+var d = create("div", {class:"tseBox"});
+var close = create("button", {class:"tseBox-close"}, "X")
+close.addEventListener("click", function(e) {
+    //add code to close the box here
+    var box = this.parentNode;
+    box.parentNode.removeChild(box);
+    document.removeEventListener("keyup", closeBox);
+    //document.
+}, false);
+d.appendChild(close)
+// insert content into the box
+
+var content = create("div")
 
 
-	// start by getting the hidden inputs
-	var inputs = $("input[type='hidden'][name$='Id']");
-	var n = "<div>";
-	var lines=new Array();
-	var names = new Array();
-	for (var i = 0; i < inputs.length; i++) {
-		var name = inputs.eq(i).attr("name");
-		var id = inputs.eq(i).val();
-		//names[name] = id;
-		var tmp = "<p><b>" + name +":</b> " + id + "</p>"
-		if ($.inArray(tmp,lines) == -1 && name.indexOf("_") == -1 && id != "") {
-			lines.push(tmp);
-			names[name] = id;
-			n += tmp;
-		}
-	}
-	// now check the page url
-	var queryString = window.location.search;
-	var match = queryString.match(/[a-zA-z]*Id=[0-9]*&/g);
-	if (match) {
-		for (var i = 0; i < match.length; i++)
-		{
-			var submatch = match[i].match(/([a-zA-Z]*Id)=([0-9]*)*/);
-			name = submatch[1];
-			id = submatch[2];
-			tmp = "<p><b>" + name +":</b> " + id + "</p>";
-			if ($.inArray(tmp,lines) == -1) {
-				lines.push(tmp);
-				names[name] = id;
-				n += tmp;
-			}
-		}
-	}
-	n += "</div>";
-	var url = "https://" + window.location.host + "/gmas/request/SCR0115Request.jsp?requestId=" + names['requestId'] + "&segmentId=" + names['segmentId'];
-	var str = "Project " + x + ", [Request " + names['requestId'] + "|" + url + "]";
-	alert(str);
-	//$(n).dialog();
+// this is VERY dependent on page structure - should probably be made to be more bullet proof
+var project = $("td.strong+td+td").textContent;
+project = project.match(/[0-9]{8}-[0-9]{2}/)[0];
+while (project.charAt(0) === '0') project = project.substr(1);
+
+var names = {}
+var inputs = $$("input[type='hidden'][name$='Id']");
+for (var i=0; i<inputs.length; i++) {
+    var name = inputs[i].getAttribute("name");
+    var id = inputs[i].getAttribute("value");
+    names[name] = id;
+}
+var url = "https://" + window.location.host + "/gmas/request/SCR0115Request.jsp?requestId=" + names['requestId'] + "&segmentId=" + names['segmentId'];
+var str = "Project " + project + ", [Request " + names['requestId'] + "|" + url + "]";
+
+content.innerHTML = str;
+
+d.appendChild(content)
+document.body.appendChild(d)
+selectText(content);
+
+document.addEventListener("keyup", closeBox, false);
+
+function closeBox(e) {
+    if (e.keyCode == 27 || (e.ctrlKey && e.keyCode == 67)) {
+        //console.log(e.keyCode)
+        $(".tseBox-close").click();
+    }
 }
