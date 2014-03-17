@@ -83,12 +83,30 @@ document.body.appendChild(d);
 $("#segmentId").focus();
 $("#env").value = 'https://' + window.location.host;
 $("#segmentId").addEventListener("keyup", up, false);
+$("#segmentId").addEventListener("keydown", down, false)
 
 function up(e) {
 	if (e.ctrlKey && e.keyCode == 86) {
-		var urlstring = "/gmas/project/SCR0104SegmentHome.jsp?segmentId=";
-		//$(this).dialog("close");
-		window.location = $("#env").value + urlstring + this.value.trim();
-		$(".tseBox-close").click();
+		gotoSegment(this.value.trim())
 	}
+}
+
+function down(e)
+{
+	if (e.metaKey && e.keyCode == 86)
+	{
+		this.addEventListener("keyup", function(e) {
+			if (e.keyIdentifier == "Meta")
+			{
+				gotoSegment(this.value.trim());
+			}
+		}, false);
+	}
+}
+
+function gotoSegment(segmentId)
+{
+	var urlstring = "/gmas/project/SCR0104SegmentHome.jsp?segmentId=";	
+	window.location = $("#env").value + urlstring + segmentId;
+	$(".tseBox-close").click();
 }
