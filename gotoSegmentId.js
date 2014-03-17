@@ -67,7 +67,6 @@ var str = "\
 <form>\
 <select id='env' name='env'>\
 	<option value='https://gmasdev.cadm.harvard.edu'>DEV</option>\
-	<option value='https://gmasdev.ca.harvard.edu'>VM DEV</option>\
 	<option value='https://gmastest.cadm.harvard.edu'>TEST</option>\
 	<option value='https://gmastraining.harvard.edu'>TRAINING</option>\
 	<option value='https://gmas.harvard.edu'>PROD</option>\
@@ -83,10 +82,10 @@ d.appendChild(content)
 document.body.appendChild(d);
 $("#segmentId").focus();
 $("#env").value = 'https://' + window.location.host;
-$("#segmentId").addEventListener("keydown", up, false);
+$("#segmentId").addEventListener("keyup", up, false);
 
 function up(e) {
-	if ((e.keyIdentifier == "Meta" || e.ctrlKey) && e.keyCode == 86) {
+	if (e.ctrlKey && e.keyCode == 86) {
 		var urlstring = "/gmas/project/SCR0104SegmentHome.jsp?segmentId=";
 		//$(this).dialog("close");
 		window.location = $("#env").value + urlstring + this.value.trim();
