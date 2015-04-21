@@ -66,8 +66,10 @@ var str = "\
 <div>\
 <form>\
 <select id='env' name='env'>\
+	<option value='https://gmassand.ca.harvard.edu'>SAND</option>\
 	<option value='https://gmasdev.ca.harvard.edu'>DEV</option>\
 	<option value='https://gmastest.ca.harvard.edu'>TEST</option>\
+	<option value='https://gmasint.ca.harvard.edu'>INT</option>\
 	<option value='https://gmastraining.harvard.edu'>TRAINING</option>\
 	<option value='https://gmas.harvard.edu'>PROD</option>\
 </select>\
